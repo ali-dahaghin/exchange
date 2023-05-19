@@ -1,0 +1,36 @@
+b price is 100
+a price is determined by b trading it
+
+pages:
+
+all:
+login
+	gets email and password
+
+
+normal:
+-buy b
+	get b price
+	user : specifies b amount from user and call a post api
+	call ipg with redirect url
+	confirm or reverse
+
+-trade a to b
+	get orders
+	show orders
+	user : specifies amount of A it wants and amount of b it is willing to give and create an order
+	get orders again
+	show orders again
+
+-trade b to a
+	same as above but reversed
+
+-register
+	gets email and password
+
+
+admin:
+give a
+	gets all users
+	show them
+	user: select a user and amount of "A" and submit the form
