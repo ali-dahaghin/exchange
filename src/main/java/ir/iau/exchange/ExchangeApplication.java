@@ -5,6 +5,7 @@ import ir.iau.exchange.dto.UserDto;
 import ir.iau.exchange.entity.Role;
 import ir.iau.exchange.entity.User;
 import ir.iau.exchange.repository.RoleRepository;
+import ir.iau.exchange.service.AssetService;
 import ir.iau.exchange.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +25,7 @@ public class ExchangeApplication {
 		ConfigurableApplicationContext context = SpringApplication.run(ExchangeApplication.class, args);
 		UserService userService = context.getBean(UserService.class);
 		RoleRepository roleRepository = context.getBean(RoleRepository.class);
+		AssetService assetService = context.getBean(AssetService.class);
 
 		Role userRole = new Role();
 		if (roleRepository.findByName("ROLE_USER") == null) {
@@ -46,6 +48,16 @@ public class ExchangeApplication {
 			userDto.setIsAdmin(true);
 			userService.createUser(userDto);
 			logger.info("admin created");
+		}
+
+		if (assetService.findByCode("A") == null) {
+			assetService.create("A");
+			logger.info("asset a created");
+		}
+
+		if (assetService.findByCode("B") == null) {
+			assetService.create("B");
+			logger.info("asset b created");
 		}
 	}
 

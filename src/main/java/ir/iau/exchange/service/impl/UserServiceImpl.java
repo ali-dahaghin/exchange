@@ -1,4 +1,4 @@
-package ir.iau.exchange.service;
+package ir.iau.exchange.service.impl;
 
 import ir.iau.exchange.dto.CreateUserDto;
 import ir.iau.exchange.dto.UserDto;
@@ -7,6 +7,7 @@ import ir.iau.exchange.entity.User;
 import ir.iau.exchange.exceptions.BadRequestRuntimeException;
 import ir.iau.exchange.repository.RoleRepository;
 import ir.iau.exchange.repository.UserRepository;
+import ir.iau.exchange.service.UserService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
