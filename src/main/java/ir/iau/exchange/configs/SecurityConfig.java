@@ -1,58 +1,58 @@
 package ir.iau.exchange.configs;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.JdbcUserDetailsManager;
-import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
-
-import javax.sql.DataSource;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
+@EnableWebSecurity
 public class SecurityConfig {
 
+    @Autowired
+    private UserDetailsService userDetailsService;
+
     @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().antMatchers("/**");
+    public static PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .authorizeHttpRequests((auth) ->
-                        auth.antMatchers("/register", "/css/**", "/js/**").permitAll()
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http.csrf().disable()
+                .authorizeHttpRequests((authorize) ->
+                        authorize.antMatchers("/", "/auth/**").permitAll()
+                                .antMatchers("/admin/**").hasRole("ADMIN")
+                                .antMatchers("/api/admin/**").hasRole("ADMIN")
+                                .antMatchers("/user/**").hasAnyRole("ADMIN", "USER")
+                                .antMatchers("/api/user/**").hasAnyRole("ADMIN", "USER")
                                 .anyRequest().authenticated()
-                )
-                .formLogin().loginPage("/login")
-                .defaultSuccessUrl("/user/home")
-                .permitAll()
-                .and()
-                .logout()
-                .logoutUrl("/logout")
-                .permitAll();;
+                ).formLogin(
+                        form -> form
+                                .loginPage("/auth/login")
+                                .loginProcessingUrl("/auth/login")
+                                .defaultSuccessUrl("/user/home")
+                                .permitAll()
+                ).logout(
+                        logout -> logout
+                                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                                .permitAll()
+                );
         return http.build();
     }
 
-    @Bean
-    public UserDetailsManager users(DataSource dataSource) {
-        UserDetails user = User.builder().passwordEncoder((pass) -> passwordEncoder().encode(pass))
-                .username("user")
-                .password("password")
-                .roles("USER")
-                .build();
-        JdbcUserDetailsManager users = new JdbcUserDetailsManager(dataSource);
-        users.createUser(user);
-        return users;
+    @Autowired
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        auth
+                .userDetailsService(userDetailsService)
+                .passwordEncoder(passwordEncoder());
     }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(11);
-    }
 }
