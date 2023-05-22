@@ -7,6 +7,8 @@ import ir.iau.exchange.service.AssetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class AssetServiceImpl implements AssetService {
 
@@ -28,5 +30,10 @@ public class AssetServiceImpl implements AssetService {
     @Override
     public Asset findByCode(String code) {
         return assetRepository.findByCode(code).orElse(null);
+    }
+
+    @Override
+    public List<Asset> findAll() {
+        return assetRepository.findAll();
     }
 }

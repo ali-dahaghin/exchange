@@ -1,6 +1,6 @@
 package ir.iau.exchange.controllers;
 
-import ir.iau.exchange.dto.CreateUserDto;
+import ir.iau.exchange.dto.requestes.CreateUserRequestDto;
 import ir.iau.exchange.exceptions.BadRequestRuntimeException;
 import ir.iau.exchange.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,15 +19,15 @@ public class AuthController {
     @GetMapping("/auth/register")
     public ModelAndView registerPage() {
         ModelAndView modelAndView = new ModelAndView();
-        CreateUserDto createUserDto = new CreateUserDto();
-        modelAndView.addObject("user", createUserDto);
+        CreateUserRequestDto createUserRequestDto = new CreateUserRequestDto();
+        modelAndView.addObject("user", createUserRequestDto);
         return modelAndView;
     }
 
     @PostMapping("/auth/register/save")
-    public String register(@ModelAttribute CreateUserDto createUserDto) {
+    public String register(@ModelAttribute CreateUserRequestDto createUserRequestDto) {
         try {
-            userService.createUser(createUserDto);
+            userService.createUser(createUserRequestDto);
             return "redirect:/auth/login";
         } catch (BadRequestRuntimeException e) {
             return "redirect:/auth/login";

@@ -1,12 +1,15 @@
 package ir.iau.exchange.service.impl;
 
-import ir.iau.exchange.dto.CreateUserDto;
+import ir.iau.exchange.dto.requestes.CreateUserRequestDto;
 import ir.iau.exchange.entity.Role;
 import ir.iau.exchange.entity.User;
 import ir.iau.exchange.exceptions.BadRequestRuntimeException;
 import ir.iau.exchange.repository.RoleRepository;
 import ir.iau.exchange.repository.UserRepository;
 import ir.iau.exchange.service.UserService;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,7 +30,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public User createUser(CreateUserDto dto) {
+    public User createUser(CreateUserRequestDto dto) {
         if (findByUsername(dto.getUsername()) != null) {
             throw new BadRequestRuntimeException("user already exists");
         }
@@ -50,4 +53,15 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAll();
     }
 
+    @Override
+    public User getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null) {
+            throw new BadRequestRuntimeException("not authenticated");
+        }
+        Object principal = authentication.getPrincipal();
+        UserDetails userDetails = (UserDetails) principal;
+
+        return findByUsername(userDetails.getUsername());
+    }
 }

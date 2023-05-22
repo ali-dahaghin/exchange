@@ -1,6 +1,6 @@
 package ir.iau.exchange;
 
-import ir.iau.exchange.dto.CreateUserDto;
+import ir.iau.exchange.dto.requestes.CreateUserRequestDto;
 import ir.iau.exchange.entity.Role;
 import ir.iau.exchange.repository.RoleRepository;
 import ir.iau.exchange.service.AssetService;
@@ -10,8 +10,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
+@EnableScheduling
 public class ExchangeApplication {
 
 	private static final Logger logger = LoggerFactory.getLogger(ExchangeApplication.class);
@@ -37,7 +39,7 @@ public class ExchangeApplication {
 		}
 
 		if (userService.findByUsername("admin") == null) {
-			CreateUserDto userDto = new CreateUserDto();
+			CreateUserRequestDto userDto = new CreateUserRequestDto();
 			userDto.setUsername("admin");
 			userDto.setPassword("password");
 			userDto.setIsAdmin(true);
