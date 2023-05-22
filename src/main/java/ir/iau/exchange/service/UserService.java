@@ -1,7 +1,6 @@
 package ir.iau.exchange.service;
 
 import ir.iau.exchange.dto.CreateUserDto;
-import ir.iau.exchange.dto.UserDto;
 import ir.iau.exchange.entity.User;
 
 import java.util.List;

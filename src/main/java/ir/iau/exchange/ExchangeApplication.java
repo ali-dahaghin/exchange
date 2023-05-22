@@ -1,9 +1,7 @@
 package ir.iau.exchange;
 
 import ir.iau.exchange.dto.CreateUserDto;
-import ir.iau.exchange.dto.UserDto;
 import ir.iau.exchange.entity.Role;
-import ir.iau.exchange.entity.User;
 import ir.iau.exchange.repository.RoleRepository;
 import ir.iau.exchange.service.AssetService;
 import ir.iau.exchange.service.UserService;
@@ -12,9 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
-
-import java.util.Arrays;
-import java.util.Collections;
 
 @SpringBootApplication
 public class ExchangeApplication {
