@@ -1,5 +1,6 @@
 package ir.iau.exchange.service.impl;
 
+import ir.iau.exchange.configs.ApplicationStartup;
 import ir.iau.exchange.dto.ExchangeData;
 import ir.iau.exchange.dto.requestes.SubmitOrderRequestDto;
 import ir.iau.exchange.entity.Asset;
@@ -14,17 +15,21 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationListener;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Service
-public class OrderServiceImpl implements OrderService, InitializingBean {
+@ConditionalOnBean(ApplicationStartup.class)
+public class OrderServiceImpl implements OrderService, ApplicationListener<ApplicationReadyEvent> {
 
     private static final Logger logger = LoggerFactory.getLogger(OrderServiceImpl.class);
 
@@ -40,17 +45,18 @@ public class OrderServiceImpl implements OrderService, InitializingBean {
     @Autowired
     private ApplicationContext applicationContext;
 
-    private final Map<String, Map<String, List<Order>>> exchangeMap = new HashMap<>();
+    private final Map<String, Map<String, List<Order>>> exchangeMap = new ConcurrentHashMap<>();
+
 
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void onApplicationEvent(ApplicationReadyEvent event) {
         List<Asset> assets = assetService.findAll();
         for (Asset source : assets) {
             for (Asset dest : assets) {
                 if (source.getCode().equals(dest.getCode()))
                     continue;
                 List<Order> orders = orderRepository.findByIsClosedFalseAndSource_codeAndDestination_codeOrderBySubmitDateDesc(source.getCode(), dest.getCode());
-                Map<String, List<Order>> map = new HashMap<>();
+                Map<String, List<Order>> map = new ConcurrentHashMap<>();
                 map.put(dest.getCode(), orders);
                 exchangeMap.put(source.getCode(), map);
             }
@@ -58,7 +64,7 @@ public class OrderServiceImpl implements OrderService, InitializingBean {
     }
 
     @Override
-    public Order submitForCurrentUser(SubmitOrderRequestDto requestDto) {
+    public synchronized Order submitForCurrentUser(SubmitOrderRequestDto requestDto) {
         Asset sourceAsset = assetService.findByCode(requestDto.getSourceCode());
         Asset destAsset = assetService.findByCode(requestDto.getDestinationCode());
 
