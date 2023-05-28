@@ -74,8 +74,8 @@ public class OrderServiceImpl implements OrderService, ApplicationListener<Appli
         order.setRequester(currentUser);
         order.setSource(sourceAsset);
         order.setDestination(destAsset);
-        order.setPrice(requestDto.getPrice());
-        order.setAmount(requestDto.getAmount());
+        order.setSourceAmount(requestDto.getSourceAmount());
+        order.setDestinationAmount(requestDto.getDestinationAmount());
         order.setTrackingCode(UUID.randomUUID());
 
         order = orderRepository.save(order);
@@ -126,7 +126,7 @@ public class OrderServiceImpl implements OrderService, ApplicationListener<Appli
                     List<SealTheDealDto> sealTheDealDto = new ArrayList<>();
                     for (Order buyOrder : buy) {
                         for (Order sellOrder : sell) {
-                            if (buyOrder.getPrice().multiply(buyOrder.getAmount()).equals(sellOrder.getPrice().multiply(sellOrder.getAmount()))) {
+                            if (buyOrder.getSourceAmount().equals(sellOrder.getDestinationAmount()) && sellOrder.getSourceAmount().equals(buyOrder.getDestinationAmount())) {
                                 sealTheDealDto.add(new SealTheDealDto(buyOrder, sellOrder));
                             }
                         }
@@ -159,7 +159,7 @@ public class OrderServiceImpl implements OrderService, ApplicationListener<Appli
         Optional<Order> optionalOrder = orderRepository.findById(orderId);
         if (optionalOrder.isPresent()) {
             Order dbOrder = optionalOrder.get();
-            dbOrder.setCompleted(dbOrder.getAmount());
+            dbOrder.setCompleted(dbOrder.getDestinationAmount());
             dbOrder.setIsClosed(true);
             dbOrder.setCloseDate(closeDate);
             orderRepository.save(dbOrder);

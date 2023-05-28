@@ -27,10 +27,10 @@ public class Order {
     private User requester;
 
     @Column(nullable = false)
-    private BigDecimal price;
+    private BigDecimal sourceAmount;
 
     @Column(nullable = false)
-    private BigDecimal amount;
+    private BigDecimal destinationAmount;
 
     @ManyToOne
     @JoinColumn(nullable = false)

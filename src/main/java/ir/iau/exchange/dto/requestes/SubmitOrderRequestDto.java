@@ -9,7 +9,7 @@ public class SubmitOrderRequestDto {
 
     private String sourceCode;
     private String destinationCode;
-    private BigDecimal amount;
-    private BigDecimal price;
+    private BigDecimal destinationAmount;
+    private BigDecimal sourceAmount;
 
 }
