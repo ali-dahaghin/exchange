@@ -6,8 +6,10 @@ import ir.iau.exchange.dto.requestes.SubmitOrderRequestDto;
 import ir.iau.exchange.entity.Asset;
 import ir.iau.exchange.entity.Order;
 import ir.iau.exchange.entity.User;
+import ir.iau.exchange.entity.UserAsset;
 import ir.iau.exchange.exceptions.BadRequestRuntimeException;
 import ir.iau.exchange.repository.OrderRepository;
+import ir.iau.exchange.repository.UserAssetRepository;
 import ir.iau.exchange.service.AssetService;
 import ir.iau.exchange.service.OrderService;
 import ir.iau.exchange.service.UserService;
@@ -43,6 +45,9 @@ public class OrderServiceImpl implements OrderService, ApplicationListener<Appli
     private UserService userService;
 
     @Autowired
+    private UserAssetRepository userAssetRepository;
+
+    @Autowired
     private ApplicationContext applicationContext;
 
     private final Map<String, Map<String, List<Order>>> exchangeMap = new ConcurrentHashMap<>();
@@ -64,12 +69,34 @@ public class OrderServiceImpl implements OrderService, ApplicationListener<Appli
     }
 
     @Override
+    @Transactional
     public synchronized Order submitForCurrentUser(SubmitOrderRequestDto requestDto) {
+        // get source asset
         Asset sourceAsset = assetService.findByCode(requestDto.getSourceCode());
-        Asset destAsset = assetService.findByCode(requestDto.getDestinationCode());
+        if (sourceAsset == null) {
+            throw new BadRequestRuntimeException("source asset not found");
+        }
 
+        // get dest asset
+        Asset destAsset = assetService.findByCode(requestDto.getDestinationCode());
+        if (destAsset == null) {
+            throw new BadRequestRuntimeException("destination asset not found");
+        }
+
+        // get current user
         User currentUser = userService.getCurrentUser();
 
+        // get current user asset
+        UserAsset currentUserAsset = userAssetRepository.findByAssetAndUser(sourceAsset, currentUser);
+        if (currentUserAsset.getBalance().compareTo(requestDto.getSourceAmount()) < 0) {
+            throw new BadRequestRuntimeException("not enough balance");
+        }
+
+        // change current user asset
+        currentUserAsset.setBalance(currentUserAsset.getBalance().subtract(requestDto.getSourceAmount()));
+        userAssetRepository.save(currentUserAsset);
+
+        // create order
         Order order = new Order();
         order.setRequester(currentUser);
         order.setSource(sourceAsset);
@@ -77,9 +104,9 @@ public class OrderServiceImpl implements OrderService, ApplicationListener<Appli
         order.setSourceAmount(requestDto.getSourceAmount());
         order.setDestinationAmount(requestDto.getDestinationAmount());
         order.setTrackingCode(UUID.randomUUID());
-
         order = orderRepository.save(order);
 
+        // put it in in-memory exchange map
         exchangeMap.get(sourceAsset.getCode()).get(destAsset.getCode()).add(order);
 
         return order;
@@ -114,7 +141,7 @@ public class OrderServiceImpl implements OrderService, ApplicationListener<Appli
         return orderRepository.findByTrackingCode(uuid).orElse(null);
     }
 
-    @Scheduled(fixedDelay = 5000)
+    @Scheduled(fixedDelay = 5000, initialDelay = 10000)
     public synchronized void matchOrders() {
         for (Map.Entry<String, Map<String, List<Order>>> map1 : exchangeMap.entrySet()) {
             String sourceCode = map1.getKey();
@@ -163,6 +190,9 @@ public class OrderServiceImpl implements OrderService, ApplicationListener<Appli
             dbOrder.setIsClosed(true);
             dbOrder.setCloseDate(closeDate);
             orderRepository.save(dbOrder);
+
+            User requester = dbOrder.getRequester();
+            userService.increaseUserAsset(requester, dbOrder.getDestination(), dbOrder.getDestinationAmount());
         } else {
             logger.error("removed order found that must not: {}", orderId);
             throw new BadRequestRuntimeException("order not found");
