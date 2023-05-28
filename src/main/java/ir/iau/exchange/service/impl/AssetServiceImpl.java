@@ -24,7 +24,7 @@ public class AssetServiceImpl implements AssetService {
         Asset asset = new Asset();
         asset.setCode(code);
 
-        return asset;
+        return assetRepository.save(asset);
     }
 
     @Override
