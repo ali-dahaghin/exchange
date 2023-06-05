@@ -1,6 +1,7 @@
 package ir.iau.exchange.controllers;
 
 import ir.iau.exchange.dto.requestes.GiveADto;
+import ir.iau.exchange.exceptions.BadRequestRuntimeException;
 import ir.iau.exchange.service.AdminService;
 import ir.iau.exchange.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,11 +35,15 @@ public class AdminController {
         return modelAndView;
     }
 
-    @PostMapping("/give/act")
+    @PostMapping("/give")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView giveAct(@ModelAttribute GiveADto giveADto) {
-        adminService.giveAAsset(giveADto);
-        return new ModelAndView("redirect:/admin/give?success");
+        try {
+            adminService.giveAAsset(giveADto);
+            return new ModelAndView("redirect:/admin/give?success");
+        } catch (BadRequestRuntimeException badRequestRuntimeException) {
+            return new ModelAndView("redirect:/admin/give?userNotExists");
+        }
     }
 
 }
