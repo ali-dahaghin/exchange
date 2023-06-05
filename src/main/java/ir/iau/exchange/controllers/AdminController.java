@@ -4,8 +4,8 @@ import ir.iau.exchange.dto.requestes.GiveADto;
 import ir.iau.exchange.service.AdminService;
 import ir.iau.exchange.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,6 +23,7 @@ public class AdminController {
     private AdminService adminService;
 
     @GetMapping("/give")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView give() {
         ModelAndView modelAndView = new ModelAndView("/admin/give");
         modelAndView.addObject("users", userService.findAll());
@@ -34,6 +35,7 @@ public class AdminController {
     }
 
     @PostMapping("/give/act")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView giveAct(@ModelAttribute GiveADto giveADto) {
         adminService.giveAAsset(giveADto);
         return new ModelAndView("redirect:/admin/give?success");
