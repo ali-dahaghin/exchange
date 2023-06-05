@@ -24,13 +24,13 @@ public class AuthController {
         return modelAndView;
     }
 
-    @PostMapping("/auth/register/save")
-    public String register(@ModelAttribute CreateUserRequestDto createUserRequestDto) {
+    @PostMapping("/auth/register")
+    public ModelAndView register(@ModelAttribute CreateUserRequestDto createUserRequestDto) {
         try {
             userService.createUser(createUserRequestDto);
-            return "redirect:/auth/login";
+            return new ModelAndView("redirect:/auth/login");
         } catch (BadRequestRuntimeException e) {
-            return "redirect:/auth/login";
+            return new ModelAndView("redirect:/auth/register?errExists");
         }
     }
 

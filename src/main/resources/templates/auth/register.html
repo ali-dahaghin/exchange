@@ -13,12 +13,15 @@
 <body>
 <div class="container">
     <div class="row col-md-8 offset-md-2">
+        <div th:if="${param.errExists}">
+            <p class="alert alert-danger">Username already exists</p>
+        </div>
         <div class="card">
             <div class="card-header">
                 <h2 class="text-center">Registration</h2>
             </div>
             <div class="card-body">
-                <form method="post" th:action="@{/auth/register/save}" th:object="${user}">
+                <form method="post" th:action="@{/auth/register}" th:object="${user}">
                     <div class="form-group mb-3">
                         <label class="form-label">Username</label>
                         <input class="form-control" id="username" name="username" placeholder="Enter username" th:field="*{username}" type="text"/>
