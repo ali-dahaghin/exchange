@@ -58,22 +58,22 @@
       <form method="post" role="form" th:action="@{/order/submit}" th:object="${req}" class="form-horizontal">
         <div class="form-group mb-3">
           <label class="control-label"> Source Asset Code</label>
-          <input type="text" id="sourceCode" name="sourceCode" class="form-control" placeholder="Source Asset Code" th:field="*{sourceCode}"/>
+          <input type="text" id="sourceCode" name="sourceCode" class="form-control" placeholder="Source Asset Code" th:field="*{sourceCode}" required/>
         </div>
 
         <div class="form-group mb-3">
           <label class="control-label"> Destination Asset Code</label>
-          <input type="text" id="destinationCode" name="destinationCode" class="form-control" placeholder="Destination Asset Code" th:field="*{destinationCode}"/>
+          <input type="text" id="destinationCode" name="destinationCode" class="form-control" placeholder="Destination Asset Code" th:field="*{destinationCode}" required/>
         </div>
 
         <div class="form-group mb-3">
           <label class="form-label"> Price (Source Amount)</label>
-          <input class="form-control" id="sourceAmount" name="sourceAmount" placeholder="Price (Source Amount)" th:field="*{sourceAmount}" type="number"/>
+          <input class="form-control" id="sourceAmount" name="sourceAmount" placeholder="Price (Source Amount)" th:field="*{sourceAmount}" type="number" required/>
         </div>
 
         <div class="form-group mb-3">
           <label class="form-label"> Amount (Destination Amount)</label>
-          <input class="form-control" id="destinationAmount" name="destinationAmount" placeholder="Amount (Destination Amount)" th:field="*{destinationAmount}" type="number"/>
+          <input class="form-control" id="destinationAmount" name="destinationAmount" placeholder="Amount (Destination Amount)" th:field="*{destinationAmount}" type="number" required/>
         </div>
 
         <div class="form-group mb-3">
