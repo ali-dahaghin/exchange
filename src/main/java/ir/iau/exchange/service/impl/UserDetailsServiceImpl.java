@@ -1,4 +1,4 @@
-package ir.iau.exchange.security;
+package ir.iau.exchange.service.impl;
 
 import ir.iau.exchange.entity.Role;
 import ir.iau.exchange.entity.User;
@@ -14,11 +14,11 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 @Service
-public class CustomUserDetailsService implements UserDetailsService {
+public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final UserService userService;
 
-    public CustomUserDetailsService(UserService userService) {
+    public UserDetailsServiceImpl(UserService userService) {
         this.userService = userService;
     }
 
