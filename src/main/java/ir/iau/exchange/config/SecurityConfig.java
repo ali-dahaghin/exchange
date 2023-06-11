@@ -28,7 +28,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeHttpRequests((authorize) ->
-                        authorize.antMatchers("/", "/auth/**").permitAll()
+                        authorize.antMatchers("/", "/auth/**", "/bootstrap.min.css").permitAll()
                                 .antMatchers("/admin/**").hasRole("ADMIN")
                                 .antMatchers("/user/**").hasRole("USER")
                                 .antMatchers("/order/**").hasRole("USER")
