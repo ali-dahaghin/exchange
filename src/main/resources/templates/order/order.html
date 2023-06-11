@@ -68,12 +68,12 @@
 
         <div class="form-group mb-3">
           <label class="form-label"> Price (Source Amount)</label>
-          <input class="form-control" id="sourceAmount" name="sourceAmount" placeholder="Price (Source Amount)" th:field="*{sourceAmount}" type="number" required/>
+          <input class="form-control" id="sourceAmount" name="sourceAmount" placeholder="Price (Source Amount)" th:field="*{sourceAmount}" type="number" min="1" required/>
         </div>
 
         <div class="form-group mb-3">
           <label class="form-label"> Amount (Destination Amount)</label>
-          <input class="form-control" id="destinationAmount" name="destinationAmount" placeholder="Amount (Destination Amount)" th:field="*{destinationAmount}" type="number" required/>
+          <input class="form-control" id="destinationAmount" name="destinationAmount" placeholder="Amount (Destination Amount)" th:field="*{destinationAmount}" type="number" min="1" required/>
         </div>
 
         <div class="form-group mb-3">
