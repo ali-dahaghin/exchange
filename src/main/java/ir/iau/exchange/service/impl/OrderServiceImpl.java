@@ -74,13 +74,13 @@ public class OrderServiceImpl implements OrderService, ApplicationListener<Appli
         // get source asset
         Asset sourceAsset = assetService.findByCode(requestDto.getSourceCode());
         if (sourceAsset == null) {
-            throw new BadRequestRuntimeException("source asset not found");
+            throw new SourceAssetNotFound();
         }
 
         // get dest asset
         Asset destAsset = assetService.findByCode(requestDto.getDestinationCode());
         if (destAsset == null) {
-            throw new BadRequestRuntimeException("destination asset not found");
+            throw new DestinationAssetNotFound();
         }
 
         // get current user
@@ -89,7 +89,7 @@ public class OrderServiceImpl implements OrderService, ApplicationListener<Appli
         // get current user asset
         UserAsset currentUserAsset = userAssetRepository.findByAssetAndUser(sourceAsset, currentUser);
         if (currentUserAsset.getBalance().compareTo(requestDto.getSourceAmount()) < 0) {
-            throw new BadRequestRuntimeException("not enough balance");
+            throw new NotEnoughBalance();
         }
 
         // change current user asset
@@ -205,5 +205,10 @@ public class OrderServiceImpl implements OrderService, ApplicationListener<Appli
         private Order order1;
         private Order order2;
     }
+
+    public static class NotEnoughBalance extends RuntimeException {}
+    public static class SourceAssetNotFound extends RuntimeException {}
+    public static class DestinationAssetNotFound extends RuntimeException {}
+
 
 }

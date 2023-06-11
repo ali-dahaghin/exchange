@@ -4,6 +4,7 @@ import ir.iau.exchange.dto.ExchangeData;
 import ir.iau.exchange.dto.requestes.SubmitOrderRequestDto;
 import ir.iau.exchange.service.OrderService;
 import ir.iau.exchange.service.UserService;
+import ir.iau.exchange.service.impl.OrderServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,8 +40,16 @@ public class OrderController {
 
     @PostMapping("/submit")
     public ModelAndView submitOrder(@ModelAttribute SubmitOrderRequestDto requestDto) {
-        orderService.submitForCurrentUser(requestDto);
-        return new ModelAndView("redirect:/order");
+        try {
+            orderService.submitForCurrentUser(requestDto);
+            return new ModelAndView("redirect:/order");
+        } catch (OrderServiceImpl.SourceAssetNotFound e) {
+            return new ModelAndView("redirect:/order?srcNF");
+        } catch (OrderServiceImpl.DestinationAssetNotFound e) {
+            return new ModelAndView("redirect:/order?destNF");
+        } catch (OrderServiceImpl.NotEnoughBalance e) {
+            return new ModelAndView("redirect:/order?balance");
+        }
     }
 
 }

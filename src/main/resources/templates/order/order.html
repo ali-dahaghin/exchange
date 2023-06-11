@@ -37,6 +37,18 @@
 <div class="container">
   <div class="row justify-content-center">
 
+    <div th:if="${param.balance}">
+      <div class="alert alert-danger">Not Enough Balance</div>
+    </div>
+
+    <div th:if="${param.srcNF}">
+      <div class="alert alert-danger">Source Asset Not Found</div>
+    </div>
+
+    <div th:if="${param.destNF}">
+      <div class="alert alert-danger">Destination Asset Not Found</div>
+    </div>
+
     <!--  order form  -->
     <div class="col">
       <form method="post" role="form" th:action="@{/order/submit}" th:object="${req}" class="form-horizontal">
