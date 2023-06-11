@@ -9,12 +9,21 @@
           rel="stylesheet"
           integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
           crossorigin="anonymous">
+    <style>
+        .mock-form {
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+        }
+    </style>
 </head>
 <body>
 
 <div class="container">
 
-    <form method="post" th:action="@{/bank/confirm}" th:object="${req}">
+    <form method="post" th:action="@{/bank/confirm}" th:object="${req}" class="mock-form">
 
         <input class="form-control" id="token" name="token" th:field="*{token}" type="hidden"/>
 
