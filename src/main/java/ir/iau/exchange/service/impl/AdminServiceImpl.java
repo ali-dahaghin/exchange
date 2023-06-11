@@ -23,7 +23,7 @@ public class AdminServiceImpl implements AdminService {
     public void giveAAsset(GiveADto dto) {
         User user = userService.findByUsername(dto.getUsername());
 
-        if (user == null) {
+        if (user == null || user.getRoles().stream().noneMatch(role -> role.getName().equals("ROLE_USER"))) {
             throw new BadRequestRuntimeException("user not found");
         }
 
