@@ -71,6 +71,11 @@ public class OrderServiceImpl implements OrderService, ApplicationListener<Appli
     @Override
     @Transactional
     public synchronized Order submitForCurrentUser(SubmitOrderRequestDto requestDto) {
+        // check stupid order
+        if (Objects.equals(requestDto.getSourceCode(), requestDto.getDestinationCode())) {
+            throw new SourceAssetAndDestinationAssetEqual();
+        }
+
         // get source asset
         Asset sourceAsset = assetService.findByCode(requestDto.getSourceCode());
         if (sourceAsset == null) {
@@ -209,6 +214,7 @@ public class OrderServiceImpl implements OrderService, ApplicationListener<Appli
     public static class NotEnoughBalance extends RuntimeException {}
     public static class SourceAssetNotFound extends RuntimeException {}
     public static class DestinationAssetNotFound extends RuntimeException {}
+    public static class SourceAssetAndDestinationAssetEqual extends RuntimeException {}
 
 
 }

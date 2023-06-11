@@ -49,6 +49,8 @@ public class OrderController {
             return new ModelAndView("redirect:/order?destNF");
         } catch (OrderServiceImpl.NotEnoughBalance e) {
             return new ModelAndView("redirect:/order?balance");
+        } catch (OrderServiceImpl.SourceAssetAndDestinationAssetEqual e) {
+            return new ModelAndView("redirect:/order?eqSrcDest");
         }
     }
 

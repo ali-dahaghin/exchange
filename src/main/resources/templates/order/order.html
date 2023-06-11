@@ -46,6 +46,11 @@
       <div class="alert alert-danger">Destination Asset Not Found</div>
     </div>
 
+    <div th:if="${param.eqSrcDest}">
+      <div class="alert alert-danger">Source And Destination Are Equal</div>
+    </div>
+
+
     <!--  order form  -->
     <div class="col">
       <h3>Order From</h3>
