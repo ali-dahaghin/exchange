@@ -1,7 +1,7 @@
-package ir.iau.exchange.controllers;
+package ir.iau.exchange.controller;
 
 import ir.iau.exchange.dto.requestes.GiveADto;
-import ir.iau.exchange.exceptions.BadRequestRuntimeException;
+import ir.iau.exchange.exception.BadRequestRuntimeException;
 import ir.iau.exchange.service.AdminService;
 import ir.iau.exchange.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

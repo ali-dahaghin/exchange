@@ -1,4 +1,4 @@
-package ir.iau.exchange.configs;
+package ir.iau.exchange.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

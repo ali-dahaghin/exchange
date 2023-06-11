@@ -2,7 +2,7 @@ package ir.iau.exchange.service.impl;
 
 import ir.iau.exchange.dto.requestes.BankConfirmDTO;
 import ir.iau.exchange.dto.requestes.BankInitDTO;
-import ir.iau.exchange.exceptions.BadRequestRuntimeException;
+import ir.iau.exchange.exception.BadRequestRuntimeException;
 import ir.iau.exchange.service.BankService;
 import ir.iau.exchange.service.UserService;
 import lombok.AllArgsConstructor;

@@ -5,7 +5,7 @@ import ir.iau.exchange.entity.Asset;
 import ir.iau.exchange.entity.Role;
 import ir.iau.exchange.entity.User;
 import ir.iau.exchange.entity.UserAsset;
-import ir.iau.exchange.exceptions.BadRequestRuntimeException;
+import ir.iau.exchange.exception.BadRequestRuntimeException;
 import ir.iau.exchange.repository.RoleRepository;
 import ir.iau.exchange.repository.UserAssetRepository;
 import ir.iau.exchange.repository.UserRepository;

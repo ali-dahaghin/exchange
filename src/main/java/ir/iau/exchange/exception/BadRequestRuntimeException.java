@@ -1,4 +1,4 @@
-package ir.iau.exchange.exceptions;
+package ir.iau.exchange.exception;
 
 public class BadRequestRuntimeException extends RuntimeException {
 

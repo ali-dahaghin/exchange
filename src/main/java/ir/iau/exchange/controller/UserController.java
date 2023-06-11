@@ -1,4 +1,4 @@
-package ir.iau.exchange.controllers;
+package ir.iau.exchange.controller;
 
 import ir.iau.exchange.entity.UserAsset;
 import ir.iau.exchange.service.UserService;

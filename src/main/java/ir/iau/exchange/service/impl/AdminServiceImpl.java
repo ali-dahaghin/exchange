@@ -3,7 +3,7 @@ package ir.iau.exchange.service.impl;
 import ir.iau.exchange.dto.requestes.GiveADto;
 import ir.iau.exchange.entity.Asset;
 import ir.iau.exchange.entity.User;
-import ir.iau.exchange.exceptions.BadRequestRuntimeException;
+import ir.iau.exchange.exception.BadRequestRuntimeException;
 import ir.iau.exchange.service.AdminService;
 import ir.iau.exchange.service.AssetService;
 import ir.iau.exchange.service.UserService;

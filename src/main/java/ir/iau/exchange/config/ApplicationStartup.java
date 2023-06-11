@@ -1,4 +1,4 @@
-package ir.iau.exchange.configs;
+package ir.iau.exchange.config;
 
 import ir.iau.exchange.dto.requestes.CreateUserRequestDto;
 import ir.iau.exchange.entity.Role;

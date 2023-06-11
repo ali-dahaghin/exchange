@@ -1,4 +1,4 @@
-package ir.iau.exchange.controllers.base;
+package ir.iau.exchange.controller.base;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

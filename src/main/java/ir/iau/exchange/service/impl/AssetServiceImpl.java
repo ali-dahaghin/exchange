@@ -1,7 +1,7 @@
 package ir.iau.exchange.service.impl;
 
 import ir.iau.exchange.entity.Asset;
-import ir.iau.exchange.exceptions.BadRequestRuntimeException;
+import ir.iau.exchange.exception.BadRequestRuntimeException;
 import ir.iau.exchange.repository.AssetRepository;
 import ir.iau.exchange.service.AssetService;
 import org.springframework.beans.factory.annotation.Autowired;
