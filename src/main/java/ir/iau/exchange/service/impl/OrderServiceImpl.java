@@ -153,7 +153,7 @@ public class OrderServiceImpl implements OrderService, ApplicationListener<Appli
                     List<SealTheDealDto> sealTheDealDto = new ArrayList<>();
                     for (Order buyOrder : buy) {
                         for (Order sellOrder : sell) {
-                            if (buyOrder.getSourceAmount().equals(sellOrder.getDestinationAmount()) && sellOrder.getSourceAmount().equals(buyOrder.getDestinationAmount())) {
+                            if (buyOrder.getSourceAmount().compareTo(sellOrder.getDestinationAmount()) == 0 && sellOrder.getSourceAmount().compareTo(buyOrder.getDestinationAmount()) == 0) {
                                 sealTheDealDto.add(new SealTheDealDto(buyOrder, sellOrder));
                             }
                         }

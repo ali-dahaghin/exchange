@@ -1,5 +1,6 @@
 package ir.iau.exchange.controller;
 
+import ir.iau.exchange.dto.ExchangeData;
 import ir.iau.exchange.dto.requestes.SubmitOrderRequestDto;
 import ir.iau.exchange.service.OrderService;
 import ir.iau.exchange.service.UserService;
@@ -21,24 +22,25 @@ public class OrderController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/")
+    @GetMapping
     public ModelAndView orderPage() {
         ModelAndView modelAndView = new ModelAndView("order/order");
         SubmitOrderRequestDto requestDto = new SubmitOrderRequestDto();
         modelAndView.addObject("req", requestDto);
-        modelAndView.addObject("ex-a-b", orderService.getExchangeData("A", "B"));
-        modelAndView.addObject("ex-b-a", orderService.getExchangeData("B", "A"));
+        ExchangeData exchangeData = orderService.getExchangeData("A", "B");
+        modelAndView.addObject("exAToB", exchangeData.getBuys());
+        modelAndView.addObject("exBToA", exchangeData.getSells());
         modelAndView.addObject("open", orderService.getOpenOrdersForCurrentUser());
         modelAndView.addObject("closed", orderService.getClosedOrdersForCurrentUser());
-        modelAndView.addObject("user-a", userService.getCurrentUserAsset("A"));
-        modelAndView.addObject("user-b", userService.getCurrentUserAsset("B"));
+        modelAndView.addObject("userAAsset", userService.getCurrentUserAsset("A"));
+        modelAndView.addObject("userBAsset", userService.getCurrentUserAsset("B"));
         return modelAndView;
     }
 
     @PostMapping("/submit")
     public ModelAndView submitOrder(@ModelAttribute SubmitOrderRequestDto requestDto) {
         orderService.submitForCurrentUser(requestDto);
-        return new ModelAndView("redirect:order/order");
+        return new ModelAndView("redirect:/order");
     }
 
 }
