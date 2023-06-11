@@ -15,11 +15,11 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/user/home")
+    @GetMapping("/user/dashboard")
     public ModelAndView home() {
         List<UserAsset> currentUserAssets = userService.getCurrentUserAssets();
 
-        ModelAndView modelAndView = new ModelAndView("/user/home");
+        ModelAndView modelAndView = new ModelAndView("/user/dashboard");
         modelAndView.addObject("userAssets", currentUserAssets);
         return modelAndView;
     }
