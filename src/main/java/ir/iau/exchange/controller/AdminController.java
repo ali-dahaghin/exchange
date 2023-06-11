@@ -5,7 +5,6 @@ import ir.iau.exchange.exception.BadRequestRuntimeException;
 import ir.iau.exchange.service.AdminService;
 import ir.iau.exchange.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -24,7 +23,6 @@ public class AdminController {
     private AdminService adminService;
 
     @GetMapping("/give")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView give() {
         ModelAndView modelAndView = new ModelAndView("/admin/give");
         modelAndView.addObject("users", userService.findAll());
@@ -36,7 +34,6 @@ public class AdminController {
     }
 
     @PostMapping("/give")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ModelAndView giveAct(@ModelAttribute GiveADto giveADto) {
         try {
             adminService.giveAAsset(giveADto);

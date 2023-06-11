@@ -30,15 +30,16 @@ public class SecurityConfig {
                 .authorizeHttpRequests((authorize) ->
                         authorize.antMatchers("/", "/auth/**").permitAll()
                                 .antMatchers("/admin/**").hasRole("ADMIN")
-                                .antMatchers("/api/admin/**").hasRole("ADMIN")
-                                .antMatchers("/user/**").hasAnyRole("ADMIN", "USER")
-                                .antMatchers("/api/user/**").hasAnyRole("ADMIN", "USER")
+                                .antMatchers("/user/**").hasRole("USER")
+                                .antMatchers("/order/**").hasRole("USER")
+                                .antMatchers("/mock-ipg/**").hasRole("USER")
+                                .antMatchers("/bank/**").hasRole("USER")
                                 .anyRequest().authenticated()
                 ).formLogin(
                         form -> form
                                 .loginPage("/auth/login")
                                 .loginProcessingUrl("/auth/login")
-                                .defaultSuccessUrl("/user/dashboard")
+                                .defaultSuccessUrl("/")
                                 .permitAll()
                 ).logout(
                         logout -> logout
