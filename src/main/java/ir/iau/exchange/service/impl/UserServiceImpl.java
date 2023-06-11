@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -99,6 +100,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserAsset getCurrentUserAsset(Asset asset) {
         return userAssetRepository.findByAssetAndUser(asset, getCurrentUser());
+    }
+
+    @Override
+    public List<UserAsset> getCurrentUserAssets() {
+        List<Asset> assetList = assetService.findAll();
+        return assetList.stream().map(this::getCurrentUserAsset).collect(Collectors.toList());
     }
 
     @Override

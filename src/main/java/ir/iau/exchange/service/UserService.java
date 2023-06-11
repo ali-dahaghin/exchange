@@ -22,6 +22,8 @@ public interface UserService {
 
     UserAsset getCurrentUserAsset(Asset asset);
 
+    List<UserAsset> getCurrentUserAssets();
+
     UserAsset getUserAsset(User user, Asset asset);
 
     UserAsset increaseCurrentUserAsset(String assetCode, BigDecimal amount);
