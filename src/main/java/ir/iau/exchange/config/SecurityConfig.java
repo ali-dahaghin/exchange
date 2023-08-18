@@ -1,5 +1,7 @@
 package ir.iau.exchange.config;
 
+import ir.iau.exchange.filter.JwtAuthenticationFilter;
+import ir.iau.exchange.service.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
@@ -19,6 +22,9 @@ public class SecurityConfig {
     @Autowired
     private UserDetailsService userDetailsService;
 
+    @Autowired
+    private JwtService jwtService;
+
     @Bean
     public static PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -26,9 +32,11 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(jwtService);
+
         http.csrf().disable()
                 .authorizeHttpRequests((authorize) ->
-                        authorize.antMatchers("/", "/auth/**", "/bootstrap.min.css").permitAll()
+                        authorize.antMatchers("/", "/auth/**", "/bootstrap.min.css", "/api/auth/**").permitAll()
                                 .antMatchers("/admin/**").hasRole("ADMIN")
                                 .antMatchers("/user/**").hasRole("USER")
                                 .antMatchers("/order/**").hasRole("USER")
@@ -45,7 +53,7 @@ public class SecurityConfig {
                         logout -> logout
                                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                                 .permitAll()
-                );
+                ).addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
