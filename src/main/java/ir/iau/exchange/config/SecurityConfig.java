@@ -36,7 +36,7 @@ public class SecurityConfig {
 
         http.csrf().disable()
                 .authorizeHttpRequests((authorize) ->
-                        authorize.antMatchers("/", "/auth/**", "/bootstrap.min.css", "/api/auth/**").permitAll()
+                        authorize.antMatchers("/", "/auth/**", "/pub/**", "/api/auth/**").permitAll()
                                 .antMatchers("/admin/**").hasRole("ADMIN")
                                 .antMatchers("/user/**").hasRole("USER")
                                 .antMatchers("/order/**").hasRole("USER")

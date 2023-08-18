@@ -1,0 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@300&display=swap');
+
+body {
+  background-image: url('cool-background.png');
+  background-size: cover; /* or contain, or other values */
+  background-position: center center;
+
+  font-family: 'Oswald', sans-serif;
+  font-size: 1.2rem;
+}
+
+.navbar-brand {
+  padding-left: 5rem;
+  font-size: 2rem;
+}
+
+#index-head {
+  position: absolute;
+  top: 40%;
+  width: 80%;
+  text-align: center;
+}
+
+#index-head h1 {
+  font-size: 5rem;
+}
