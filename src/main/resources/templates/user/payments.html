@@ -4,11 +4,12 @@
 >
 <head>
     <meta charset="UTF-8">
-    <title>Home</title>
+    <title>Payments</title>
     <link rel="stylesheet" href="/pub/bootstrap.min.css">
     <link rel="stylesheet" href="/pub/main.css">
 </head>
 <body>
+
 <div class="container-fluid p-0">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="#">Kifino</a>
@@ -18,28 +19,50 @@
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
                 <a class="nav-item nav-link" href="/">Home</a>
-                <a th:if="${!auth}" class="nav-item nav-link" href="/auth/login">Login</a>
-                <a th:if="${!auth}" class="nav-item nav-link" href="/auth/register">Register</a>
-                <a th:if="${auth && !isAdmin}" class="nav-item nav-link" href="/user/dashboard">Dashboard</a>
-                <a th:if="${auth && !isAdmin}" class="nav-item nav-link" href="/order">Order</a>
-                <a th:if="${auth && !isAdmin}" class="nav-item nav-link" href="/bank/buy">Buy B</a>
-                <a th:if="${auth && !isAdmin}" class="nav-item nav-link" href="/payment/list">Payments</a>
-                <a th:if="${auth && isAdmin}" class="nav-item nav-link" href="/admin/give">Give A</a>
-                <a th:if="${auth && isAdmin}" class="nav-item nav-link" href="/admin/users">Users</a>
-                <a th:if="${auth}" class="nav-item nav-link" href="/logout">Logout</a>
+                <a class="nav-item nav-link active" href="/user/dashboard">Dashboard</a>
+                <a class="nav-item nav-link" href="/order">Order</a>
+                <a class="nav-item nav-link" href="/bank/buy">Buy B</a>
+                <a class="nav-item nav-link" href="/payment/list">Payments</a>
+                <a class="nav-item nav-link" href="/logout">Logout</a>
             </div>
         </div>
     </nav>
 </div>
 
+<br>
+<br>
+<br>
+
 <div class="container">
 
-    <div id="index-head">
-        <h1>Kifino</h1>
-        <sub>the future of the wallet in digital world!</sub>
+    <div class="row">
+        <h1> Payment History </h1>
     </div>
 
-
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Date</th>
+            <th scope="col">description</th>
+            <th scope="col">asset</th>
+            <th scope="col">amount</th>
+            <th scope="col">tracking code</th>
+            <th scope="col">third party name</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr th:each="his,i : ${historyForUser}">
+                <td th:text="${i.index + 1}"></td>
+                <td th:text="${his.integrationDate}"></td>
+                <td th:text="${his.description}"></td>
+                <td th:text="${his.assetCode}"></td>
+                <td th:text="${his.amount}"></td>
+                <td th:text="${his.trackingCode}"></td>
+                <td th:text="${his.thirdParty}"></td>
+            </tr>
+        </tbody>
+    </table>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>

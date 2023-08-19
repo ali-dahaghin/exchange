@@ -1,5 +1,6 @@
 package ir.iau.exchange.service.impl;
 
+import ir.iau.exchange.dto.PaymentHistoryDto;
 import ir.iau.exchange.dto.requestes.GetUserBalanceRequestDto;
 import ir.iau.exchange.dto.requestes.PaymentRequestDto;
 import ir.iau.exchange.dto.responses.GetUserBalanceResponseDto;
@@ -11,12 +12,14 @@ import ir.iau.exchange.service.PaymentService;
 import ir.iau.exchange.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class PaymentServiceImpl implements PaymentService {
@@ -108,5 +111,25 @@ public class PaymentServiceImpl implements PaymentService {
         responseDto.setResponseCode("ok");
         
         return responseDto;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<PaymentHistoryDto> getHistoryForUser(String username) {
+        return paymentHistoryRepository.findByUser_usernameOrderByIntegrationDateDesc(username).stream().map(this::convertToPaymentHistoryDto).collect(Collectors.toList());
+
+    }
+
+    private PaymentHistoryDto convertToPaymentHistoryDto(PaymentHistory entity) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        PaymentHistoryDto dto = new PaymentHistoryDto();
+        dto.setAssetCode(entity.getAsset().getCode());
+        dto.setThirdParty(entity.getApiUser().getName());
+        dto.setDescription(entity.getDescription());
+        dto.setAmount(entity.getAmount());
+        dto.setTrackingCode(entity.getTrackingCode());
+        dto.setIntegrationDate(simpleDateFormat.format(entity.getIntegrationDate()));
+        return dto;
     }
 }
