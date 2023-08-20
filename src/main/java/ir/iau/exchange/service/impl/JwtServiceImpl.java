@@ -26,7 +26,7 @@ public class JwtServiceImpl implements JwtService {
 
     private String doGenerateToken(Map<String, Object> claims, String subject, long tokenValidity) {
         return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + tokenValidity * 1000))
+                .setExpiration(new Date(System.currentTimeMillis() + tokenValidity))
                 .signWith(SignatureAlgorithm.HS512, this.secret).compact();
     }
 
