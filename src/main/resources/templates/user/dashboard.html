@@ -22,7 +22,6 @@
                 <a class="nav-item nav-link active" href="/user/dashboard">Dashboard</a>
                 <a class="nav-item nav-link" href="/order">Order</a>
                 <a class="nav-item nav-link" href="/bank/buy">Buy B</a>
-                <a class="nav-item nav-link" href="/payment/list">Payments</a>
                 <a class="nav-item nav-link" href="/logout">Logout</a>
             </div>
         </div>
@@ -35,15 +34,21 @@
 
 <div class="container">
 
+    <h1>Dashboard of <span th:text="${username}"></span></h1>
+
+    <br>
+    <br>
+    <br>
+
     <div class="row">
-        <h1> Dashboard </h1>
+        <h1> Wallets </h1>
     </div>
 
     <table class="table">
         <thead>
         <tr>
             <th scope="col">#</th>
-            <th scope="col">Code</th>
+            <th scope="col">Asset</th>
             <th scope="col">Balance</th>
         </tr>
         </thead>
@@ -53,6 +58,39 @@
                 <td th:text="${asset.asset.code}"></td>
                 <td th:text="${asset.balance}"></td>
             </tr>
+        </tbody>
+    </table>
+
+    <br>
+    <br>
+    <br>
+
+    <div class="row">
+        <h1> Payment History </h1>
+    </div>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Date</th>
+            <th scope="col">description</th>
+            <th scope="col">asset</th>
+            <th scope="col">amount</th>
+            <th scope="col">tracking code</th>
+            <th scope="col">third party name</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="his,i : ${historyForUser}">
+            <td th:text="${i.index + 1}"></td>
+            <td th:text="${his.integrationDate}"></td>
+            <td th:text="${his.description}"></td>
+            <td th:text="${his.assetCode}"></td>
+            <td th:text="${his.amount}"></td>
+            <td th:text="${his.trackingCode}"></td>
+            <td th:text="${his.thirdParty}"></td>
+        </tr>
         </tbody>
     </table>
 </div>

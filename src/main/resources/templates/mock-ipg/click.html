@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="/pub/bootstrap.min.css">
     <link rel="stylesheet" href="/pub/main.css">
     <style>
-        .mock-form {
+        .mock-page {
           position: absolute;
           left: 50%;
           top: 50%;
@@ -21,14 +21,18 @@
 
 <div class="container">
 
-    <form method="post" th:action="@{/bank/confirm}" th:object="${req}" class="mock-form">
+    <div class ="mock-page" >
+        <p>this supposed to be payment page that you enter your card number and ccv2 and password to buy stuff</p>
+        <form method="post" th:action="@{/bank/confirm}" th:object="${req}">
 
-        <input class="form-control" id="token" name="token" th:field="*{token}" type="hidden"/>
+            <input class="form-control" id="token" name="token" th:field="*{token}" type="hidden"/>
 
-        <div class="form-group">
-            <button class="btn btn-primary" type="submit">Confirm</button>
-        </div>
-    </form>
+            <div class="form-group">
+                <button class="btn btn-primary" type="submit">Confirm</button>
+            </div>
+        </form>
+    </div>
+
 </div>
 
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
